@@ -6,6 +6,8 @@ import {
     LOGIN_VALIDATION_REGEXP,
 } from '../constants';
 
+import { ApiErrors } from './errors';
+
 // ============================================================
 // Module's constants and variables
 const API_ID_REGEXP = /^([a-zA-Z0-9-_:]+):([a-zA-Z0-96-_]+)$/;
@@ -21,17 +23,17 @@ function checkLogin(login) {
     const errors = [];
 
     if (!login) {
-        errors.push('NO_LOGIN_PROVIDED');
+        errors.push(ApiErrors.NO_LOGIN_PROVIDED);
     }
     else if (login.length < MIN_LOGIN_SIZE) {
-        errors.push('LOGIN_TOO_SHORT');
+        errors.push(ApiErrors.LOGIN_TOO_SHORT);
     }
     else if (login.length > MAX_LOGIN_SIZE) {
-        errors.push('LOGIN_TOO_LONG');
+        errors.push(ApiErrors.LOGIN_TOO_LONG);
     }
 
     if (login && !login.match(LOGIN_VALIDATION_REGEXP)) {
-        errors.push('INVALID_CHARACTERS');
+        errors.push(ApiErrors.INVALID_CHARACTERS);
     }
 
     return errors;

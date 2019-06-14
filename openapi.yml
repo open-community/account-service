@@ -78,7 +78,7 @@ paths:
   /account:
     get:
       summary: "Return one account information."
-      operationId: getAccount
+      operationId: queryAccount
       parameters:
         - name: login
           description: "Login of the account"
@@ -162,7 +162,7 @@ paths:
   /account/{id}:
     get:
       summary: "Return information about an account"
-      operationId: queryAccount
+      operationId: getAccount
       parameters:
         - name: id
           in: path

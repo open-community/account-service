@@ -6,6 +6,8 @@ import base64url from 'base64url';
 
 import cryptoRandomString from 'crypto-random-string';
 
+import { BASE64_REGEXP } from './constants';
+
 // ============================================================
 // Module's constants and variables
 const pbkdf2 = util.promisify(crypto.pbkdf2);
@@ -22,7 +24,7 @@ function generateAccountId() {
         type: 'url-safe',
     });
 
-    return base64url.fromBase64(string);
+    return base64url.encode(string);
 }
 
 /**
@@ -60,7 +62,7 @@ async function hashPassword(password, salt) {
  * @returns {boolean}
  */
 function isValidBase64(string) {
-    return /^[a-zA-Z0-9-_]*$/.test(string);
+    return BASE64_REGEXP.test(string);
 }
 
 // ============================================================

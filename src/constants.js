@@ -11,9 +11,12 @@ const MAX_PASSWORD_SIZE = 128;
 
 const LOGIN_VALIDATION_REGEXP = /^[a-zA-Z0-9@+.-_]+$/;
 
+const BASE64_REGEXP = /^[a-zA-Z0-9-_]*$/;
+
 // ============================================================
 // Exports
 export {
+    BASE64_REGEXP,
     LOGIN_VALIDATION_REGEXP,
     MAX_LOGIN_SIZE,
     MAX_PASSWORD_SIZE,
