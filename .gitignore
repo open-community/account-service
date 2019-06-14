@@ -6,6 +6,8 @@
 /node_modules
 /reports
 /_book
+/.vscode
+/.dev
 
 # IDE folders
 

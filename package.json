@@ -1,11 +1,11 @@
 {
-  "name": "starter.nodejs",
-  "version": "1.9.0",
+  "name": "@open-comunity/starter.nodejs",
+  "version": "0.1.0",
   "description": "Starter kit for NodeJS",
   "author": "Abraham TEWA",
   "license": "MIT",
-  "homepage": "https://abrahamtewa.github.io/starter.nodejs",
-  "bugs": "https://github.com/AbrahamTewa/starter.nodejs/issues",
+  "homepage": "https://github.com/open-community/account-service",
+  "bugs": "https://github.com/open-community/account-service/issues",
   "private": true,
   "bin": {
     "hello": "./dist/cli.js"
@@ -20,7 +20,7 @@
     "lint:markdown": "remark . --quiet --frail",
     "semantic-release": "semantic-release",
     "start": "node dist/cli.js",
-    "start:src": "node --inspect --require @babel/register src/cli.js",
+    "start:src": "node --require @babel/register src/cli.js",
     "start:brk": "node --inspect-brk --require @babel/register src/cli.js",
     "test": "gulp clean:report:tests:unit && mocha src/**/*.spec.js --opts mocha.opts",
     "test-cov": "gulp clean:report:tests:unit && cross-env NODE_ENV=test nyc mocha src/**/*.spec.js --opts mocha.opts",
@@ -28,10 +28,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/AbrahamTewa/starter.nodejs.git"
+    "url": "git@github.com:open-community/account-service.git"
   },
   "dependencies": {
+    "base64url": "^3.0.1",
     "better-console": "^1.0.1",
+    "body-parser": "^1.19.0",
+    "crypto-random-string": "^3.0.0",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.5.14",
     "yargs": "^13.2.2"
   },
   "devDependencies": {

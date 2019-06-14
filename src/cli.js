@@ -1,15 +1,24 @@
 #!/usr/bin/env node
-const { sayHello } = require('./helpers');
+const { initialize } = require('./server');
 
 require('yargs') // eslint-disable-line no-unused-expressions
-    .usage('$0 <cmd> [args]')
-    .command('hello [name]', 'Display hello message', (yargs) => {
-        yargs.positional('name', {
-            type: 'string',
-            describe: 'The name to say hello to',
+    .usage('$0 start')
+    .command('start', 'Display hello message', (yargs) => {
+        yargs.options({
+            port: {
+                default: 3000,
+                describe: 'Port of the service',
+                type: 'number',
+            },
+
+            hostname: {
+                default: '0.0.0.0',
+                describe: 'Hostname listen by the service',
+                type: 'string',
+            },
         });
     }, (argv) => {
-        sayHello(argv.name);
+        initialize(argv);
     })
     .help()
     .argv;
