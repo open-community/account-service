@@ -60,7 +60,7 @@ async function hashPassword(password, salt) {
  * @returns {boolean}
  */
 function isValidBase64(string) {
-    return base64url.encode(base64url.decode(string)) === string;
+    return /^[a-zA-Z0-9-_]*$/.test(string);
 }
 
 // ============================================================

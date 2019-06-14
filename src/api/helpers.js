@@ -67,7 +67,7 @@ function getAccountIdFromApiId(id) {
         return null;
     }
 
-    if (info !== ACCOUNT_TYPE_CODE) {
+    if (info.type !== ACCOUNT_TYPE_CODE) {
         return null;
     }
 

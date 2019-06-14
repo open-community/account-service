@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { 
+import {
     getAccountIdFromApiId,
     checkLogin,
     dbAccountToApi,
@@ -8,19 +8,21 @@ import { Account } from '../models';
 
 // ============================================================
 // Module's constants and variables
-const API_ERRORS = {
-    INVALID_ID: 'Not a valid ID',
-};
-
 async function listAccounts(req, res) {
     const {
-        id: allApiId = [],
-        login: allLogins = [],
         'creation-date.min': creationDateMinStr,
         'creation-date.max': creationDateMaxStr,
         'deletion-date.min': deletionDateMinStr,
         'deletion-date.max': deletionDateMaxStr,
-    } = req.body;
+    } = req.query;
+
+    const allLogins = typeof req.query.login === 'string'
+        ? [req.query.login]
+        : req.query.login || [];
+
+    const allApiId = typeof req.query.id === 'string'
+        ? [req.query.id]
+        : req.query.id || [];
 
     const [listId, invalidApiIds] = checkApiId(allApiId);
     const [listLogins, invalidLogins] = checkLogins(allLogins);
@@ -157,7 +159,7 @@ function checkDates(datesString) {
         }
 
         const date = new Date(dateString);
-        
+
 
         if (Number.isNaN(date.getTime())) {
             invalidDates.push(dateString);
