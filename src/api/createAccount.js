@@ -3,12 +3,9 @@
 
 import {
     checkLogin,
+    checkPassword,
     dbAccountToApi,
 } from './helpers';
-import {
-    MAX_PASSWORD_SIZE,
-    MIN_PASSWORD_SIZE,
-} from '../constants';
 
 import { ApiErrors, buildError } from './errors';
 
@@ -53,22 +50,6 @@ async function createAccount(req, res) {
     await account.save();
 
     res.status(200).json(dbAccountToApi(account));
-}
-
-function checkPassword(password) {
-    const errors = [];
-
-    if (!password) {
-        errors.push(ApiErrors.NO_PASSWORD_PROVIDED);
-    }
-    else if (password.length < MIN_PASSWORD_SIZE) {
-        errors.push(ApiErrors.PASSWORD_TOO_SHORT);
-    }
-    else if (password.length > MAX_PASSWORD_SIZE) {
-        errors.push(ApiErrors.PASSWORD_TOO_LONG);
-    }
-
-    return errors;
 }
 
 // ============================================================

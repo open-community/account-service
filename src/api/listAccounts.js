@@ -84,15 +84,15 @@ function createQuery(
     const query = {};
 
     if (listId.length) {
-        query.id = {
-            $in: listId,
-        };
+        query.id = listId.length === 1
+            ? listId[0]
+            : { $in: listId };
     }
 
     if (listLogins.length) {
-        query.login = {
-            $in: listLogins,
-        };
+        query.login = listLogins.length === 1
+            ? listLogins[0]
+            : { $in: listLogins };
     }
 
     // Creation date

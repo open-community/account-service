@@ -4,13 +4,7 @@ import { Account } from '../models';
 import {
     getAccountIdFromApiId,
 } from './helpers';
-
-// ============================================================
-// Errors
-
-const API_ERRORS = {
-    INVALID_ID: 'Invalid ID',
-};
+import { buildError, ApiErrors } from './errors';
 
 // ============================================================
 // Functions
@@ -20,10 +14,7 @@ async function deleteAccount(req, res) {
     const id = getAccountIdFromApiId(apiId);
 
     if (!id) {
-        const errors = {
-            code: 'INVALID_ID',
-            error: API_ERRORS.INVALID_ID,
-        };
+        const errors = buildError(ApiErrors.INVALID_ID, 'id');
 
         res.status(400).json(errors);
         return;

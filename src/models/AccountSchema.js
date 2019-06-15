@@ -4,13 +4,21 @@ import { Schema } from 'mongoose';
 
 import { AccountLockedError } from '../errors';
 
-import { NB_PASSWORD_CHECK_BEFORE_LOCK } from '../constants';
+import {
+    NB_PASSWORD_CHECK_BEFORE_LOCK,
+    PASSWORD_LOCK_DURATION,
+} from '../constants';
 
 import {
     generateAccountId,
     generatePasswordSalt,
     hashPassword,
 } from '../helpers';
+
+const LockReasons = {
+    PASSWORD_FAILED_ATTEMPTS: 'PASSWORD_FAILED_ATTEMPTS',
+    MANUAL: 'MANUAL',
+};
 
 // ============================================================
 // Schema
@@ -27,7 +35,7 @@ const AccountSchema = new Schema({
     },
 
     auth: {
-        password: {
+        hash: {
             type: String,
         },
 
@@ -35,9 +43,19 @@ const AccountSchema = new Schema({
             type: String,
         },
 
-        nbInvalidAttempts: {
+        nbInvalidChecks: {
             type: Number,
             default: 0,
+        },
+
+        lastCheckDate: Date,
+    },
+
+    lock: {
+        date: Date,
+        reason: {
+            type: ['string'],
+            enum: Object.values(LockReasons),
         },
     },
 
@@ -56,44 +74,43 @@ const AccountSchema = new Schema({
  * Indicate if the account is locked or not.
  * @public
  */
-AccountSchema.methods.isLocked = function isLocked() {
-    return this.auth.nbInvalidAttempts >= NB_PASSWORD_CHECK_BEFORE_LOCK;
+AccountSchema.methods.isPasswordCheckLocked = function isPasswordCheckLocked() {
+    const a = this.auth.nbInvalidChecks >= NB_PASSWORD_CHECK_BEFORE_LOCK;
+    const b = this.auth.lastCheckDate.getTime() + PASSWORD_LOCK_DURATION > Date.now();
+
+    return a && b;
 };
 
 /**
  * Indicate if the given password match the account password
  * @public
  */
-AccountSchema.methods.isPasswordEqual = async function isPasswordEqual(password) {
-    if (this.isLocked()) {
+AccountSchema.methods.arePasswordEqual = async function arePasswordEqual(password) {
+    if (this.isPasswordCheckLocked()) {
         throw new AccountLockedError();
     }
 
-    // If no password, then the check will always fail
-    if (!this.auth.password) {
-        return false;
+    this.auth.lastCheckDate = new Date();
+
+    if (this.auth.nbInvalidChecks >= NB_PASSWORD_CHECK_BEFORE_LOCK) {
+        this.auth.nbInvalidChecks = 0;
     }
 
-    const hash = await hashPassword(password, this.salt);
-
-    const isEqual = hash === this.auth.hash;
-
-    const shouldUpdateAttemptNumber = !isEqual || this.auth.nbInvalidAttempts > 0;
+    let isEqual;
+    if (!this.auth.hash) {
+        isEqual = false;
+    }
+    else {
+        const hash = await hashPassword(password, this.auth.salt);
+        isEqual = hash === this.auth.hash;
+    }
 
     // Updating the attempt number
-    if (shouldUpdateAttemptNumber) {
-        const nbInvalidAttempts = isEqual
-            ? 0
-            : this.auth.nbInvalidAttempts + 1;
+    this.auth.nbInvalidChecks = isEqual
+        ? 0
+        : this.auth.nbInvalidChecks + 1;
 
-        await this.update({
-            auth: {
-                nbInvalidAttempts,
-            },
-        });
-
-        await this.save();
-    }
+    await this.save();
 
     return isEqual;
 };
@@ -118,7 +135,7 @@ AccountSchema.methods.updatePassword = async function updatePassword(password) {
  * @public
  */
 AccountSchema.methods.unlock = async function unlock() {
-    this.auth.nbInvalidAttempts = 0;
+    this.auth.nbInvalidChecks = 0;
 };
 
 // ============================================================
@@ -135,7 +152,7 @@ AccountSchema.statics.createAccount = async function createAccount({
         id: generateAccountId(),
         login,
         auth: {
-            nbInvalidAttempts: 0,
+            nbInvalidChecks: 0,
         },
     });
 

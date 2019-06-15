@@ -19,6 +19,7 @@ const ErrorMessages = {
     PASSWORD_TOO_SHORT: `Password too short (min: ${MIN_PASSWORD_SIZE})`,
     LOGIN_TOO_LONG: `Login too long (min: ${MAX_LOGIN_SIZE})`,
     PASSWORD_TOO_LONG: `Password too long (min: ${MAX_PASSWORD_SIZE})`,
+    INVALID_REQUEST: 'Invalid request',
 };
 
 const ApiErrors = Object.keys(ErrorMessages).reduce((acc, code) => {

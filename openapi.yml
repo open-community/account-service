@@ -15,6 +15,10 @@ info:
 externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
+  
+servers:
+  - description: "Localhost server"
+    url: http://localhost:3000
 
 paths:
   /accounts:
@@ -76,33 +80,6 @@ paths:
                   $ref: "#/components/schemas/Account"
     
   /account:
-    get:
-      summary: "Return one account information."
-      operationId: queryAccount
-      parameters:
-        - name: login
-          description: "Login of the account"
-          in: query
-          schema:
-            type: string
-            format: base64-url
-          
-        - name: id
-          description: "ID of the account"
-          in: query
-          schema:
-            type: string
-            format: base64-url
-          
-      responses:
-        200:
-          description: Account information
-          
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Account"
-      
     put:
       summary: "Create a new account"
       operationId: createAccount
@@ -225,40 +202,6 @@ paths:
         404:
           description: "Account not found"
 
-  /account/{id}/check:
-    post:
-      summary: "Check a password. In case of too many password check fail, the account will be lock. Use the /account/{id}/unlock route to unlock it."
-      operationId: checkAccountPassword
-      parameters:
-        - name: id
-          in: path
-          description: "ID of account"
-          required: true
-          schema:
-            type: string
-            format: base64-url
-      requestBody:
-        description: "Information to update. Set a field to null to empty a field."
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                hash:
-                  type: string
-                  description: "Password to check"
-                  format: base64-url
-
-      responses:
-        200:
-          description: "Password check successful"
-
-        401:
-          description: "Invalid password"
-
-        404:
-          description: "Account not found"
-
   /account/{id}/password:
     put:
       summary: "Update a password"
@@ -293,6 +236,43 @@ paths:
         404:
           description: "Account not found"
           
+  /account/{id}/password/check:
+    post:
+      summary: "Check a password. In case of too many password check fail, the account will be lock. Use the /account/{id}/unlock route to unlock it."
+      operationId: checkAccountPassword
+      parameters:
+        - name: id
+          in: path
+          description: "ID of account"
+          required: true
+          schema:
+            type: string
+            format: base64-url
+      requestBody:
+        description: "Information to update. Set a field to null to empty a field."
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  description: "Password to check. The password has been "
+                  format: base64-url
+
+      responses:
+        200:
+          description: "Password check successful"
+
+        401:
+          description: "Invalid password"
+
+        403:
+          description: "Account locked"
+
+        404:
+          description: "Account not found"
+
   /account/{id}/unlock:
     post:
       summary: "Unlock an account"

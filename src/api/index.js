@@ -1,5 +1,6 @@
 // ============================================================
 // Import modules
+import checkAccountPassword from './checkAccountPassword';
 import createAccount from './createAccount';
 import deleteAccount from './deleteAccount';
 import getAccount from './getAccount';
@@ -21,10 +22,14 @@ function routes(app) {
     app.put('/account', createAccount);
 
     // account/:id
-    route = `/account/:id`;
+    route = '/account/:id';
     app.get(route, getAccount);
     app.delete(route, deleteAccount);
     app.post(route, updateAccount);
+
+    // account/:id/password/check
+    route = '/account/:id/password/check';
+    app.post(route, checkAccountPassword);
 }
 
 // ============================================================

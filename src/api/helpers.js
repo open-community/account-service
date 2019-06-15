@@ -2,7 +2,9 @@ import base64url from 'base64url';
 import { isValidBase64 } from '../helpers';
 import {
     MIN_LOGIN_SIZE,
+    MIN_PASSWORD_SIZE,
     MAX_LOGIN_SIZE,
+    MAX_PASSWORD_SIZE,
     LOGIN_VALIDATION_REGEXP,
 } from '../constants';
 
@@ -34,6 +36,22 @@ function checkLogin(login) {
 
     if (login && !login.match(LOGIN_VALIDATION_REGEXP)) {
         errors.push(ApiErrors.INVALID_CHARACTERS);
+    }
+
+    return errors;
+}
+
+function checkPassword(password) {
+    const errors = [];
+
+    if (!password) {
+        errors.push(ApiErrors.NO_PASSWORD_PROVIDED);
+    }
+    else if (password.length < MIN_PASSWORD_SIZE) {
+        errors.push(ApiErrors.PASSWORD_TOO_SHORT);
+    }
+    else if (password.length > MAX_PASSWORD_SIZE) {
+        errors.push(ApiErrors.PASSWORD_TOO_LONG);
     }
 
     return errors;
@@ -114,6 +132,7 @@ function toApiId(id) {
 // Exports
 export {
     checkLogin,
+    checkPassword,
     dbAccountToApi,
     getAccountIdFromApiId,
     toApiId,
