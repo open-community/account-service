@@ -1,12 +1,12 @@
 // ============================================================
 // Import modules
-import checkAccountPassword from './checkAccountPassword';
+import checkPassword from './checkPassword';
 import createAccount from './createAccount';
 import deleteAccount from './deleteAccount';
 import getAccount from './getAccount';
 import listAccount from './listAccounts';
 import updateAccount from './updateAccount';
-import { BASE64_REGEXP } from '../constants';
+import updatePassword from './updatePassword';
 
 // ============================================================
 // Functions
@@ -27,9 +27,13 @@ function routes(app) {
     app.delete(route, deleteAccount);
     app.post(route, updateAccount);
 
+    // account/:id/password
+    route = '/account/:id/password';
+    app.post(route, updatePassword);
+
     // account/:id/password/check
     route = '/account/:id/password/check';
-    app.post(route, checkAccountPassword);
+    app.post(route, checkPassword);
 }
 
 // ============================================================

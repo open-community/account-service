@@ -12,7 +12,7 @@ import { ApiErrors } from './errors';
 
 // ============================================================
 // Module's constants and variables
-const API_ID_REGEXP = /^([a-zA-Z0-9-_:]+):([a-zA-Z0-96-_]+)$/;
+const API_ID_REGEXP = /^([a-zA-Z0-9-_:]+):([a-zA-Z0-9-_]+)$/;
 const ACCOUNT_TYPE_CODE = 'account';
 
 // ============================================================

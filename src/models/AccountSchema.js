@@ -75,10 +75,8 @@ const AccountSchema = new Schema({
  * @public
  */
 AccountSchema.methods.isPasswordCheckLocked = function isPasswordCheckLocked() {
-    const a = this.auth.nbInvalidChecks >= NB_PASSWORD_CHECK_BEFORE_LOCK;
-    const b = this.auth.lastCheckDate.getTime() + PASSWORD_LOCK_DURATION > Date.now();
-
-    return a && b;
+    return this.auth.nbInvalidChecks >= NB_PASSWORD_CHECK_BEFORE_LOCK
+           && this.auth.lastCheckDate.getTime() + PASSWORD_LOCK_DURATION > Date.now();
 };
 
 /**

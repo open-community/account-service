@@ -205,7 +205,7 @@ paths:
   /account/{id}/password:
     put:
       summary: "Update a password"
-      operationId: updateAccountPassword
+      operationId: updatePassword
       parameters:
         - name: id
           in: path
@@ -221,9 +221,9 @@ paths:
             schema:
               type: object
               properties:
-                hash:
+                password:
                   type: string
-                  description: "Hash of the new password"
+                  description: "New password"
                   format: base64-url
       responses:
         200:
@@ -232,14 +232,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Account"
-                
+
+        404:
+          description: "Invalid request"
+
         404:
           description: "Account not found"
           
   /account/{id}/password/check:
     post:
       summary: "Check a password. In case of too many password check fail, the account will be lock. Use the /account/{id}/unlock route to unlock it."
-      operationId: checkAccountPassword
+      operationId: checkPassword
       parameters:
         - name: id
           in: path
@@ -269,25 +272,6 @@ paths:
 
         403:
           description: "Account locked"
-
-        404:
-          description: "Account not found"
-
-  /account/{id}/unlock:
-    post:
-      summary: "Unlock an account"
-      operationId: unlockAccount
-      parameters:
-        - name: id
-          in: path
-          description: "ID of account"
-          required: true
-          schema:
-            type: string
-            format: base64-url
-      responses:
-        200:
-          description: "Account unlocked"
 
         404:
           description: "Account not found"

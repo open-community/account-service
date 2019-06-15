@@ -1,7 +1,7 @@
 // ============================================================
 // Constants
 
-const NB_PASSWORD_CHECK_BEFORE_LOCK = 2;
+const NB_PASSWORD_CHECK_BEFORE_LOCK = 10;
 const PASSWORD_LOCK_DURATION = 10 * 60 * 1000; // 10 minutes
 
 const MIN_LOGIN_SIZE = 2;
