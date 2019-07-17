@@ -2,6 +2,9 @@
 // Import packages
 import { Schema } from 'mongoose';
 
+// ============================================================
+// Import modules
+
 import { AccountLockedError } from '../errors';
 
 import {

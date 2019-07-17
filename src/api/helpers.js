@@ -18,6 +18,31 @@ const ACCOUNT_TYPE_CODE = 'account';
 // ============================================================
 // Functions
 
+function checkDates(datesString) {
+    const invalidDates = [];
+
+    const dates = datesString.map((dateString) => {
+        if (!dateString) {
+            return null;
+        }
+
+        const date = new Date(dateString);
+
+
+        if (Number.isNaN(date.getTime())) {
+            invalidDates.push(dateString);
+            return null;
+        }
+
+        return date;
+    });
+
+    return [
+        dates,
+        _.uniq(invalidDates),
+    ];
+}
+
 /**
  * Check the login format
  */
@@ -131,6 +156,7 @@ function toApiId(id) {
 // ============================================================
 // Exports
 export {
+    checkDates,
     checkLogin,
     checkPassword,
     dbAccountToApi,

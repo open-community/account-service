@@ -233,7 +233,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Account"
 
-        404:
+        400:
           description: "Invalid request"
 
         404:
@@ -242,7 +242,7 @@ paths:
   /account/{id}/password/check:
     post:
       summary: "Check a password. In case of too many password check fail, the account will be lock. Use the /account/{id}/unlock route to unlock it."
-      operationId: checkPassword
+      operationId: checkPassword 
       parameters:
         - name: id
           in: path
